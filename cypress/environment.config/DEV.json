@@ -1,0 +1,5 @@
+{
+  "env": {
+    "apiBaseUrl": "https://swapi.dev/api/"
+  }
+}

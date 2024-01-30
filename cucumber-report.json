@@ -1,0 +1,97 @@
+[
+  {
+    "description": "      | Case    | Description       | Code |\n      | Default | Get all firmwares | 200  |",
+    "elements": [
+      {
+        "description": "",
+        "id": "get-all-firmwares;default-case-qa0009",
+        "keyword": "Scenario Outline",
+        "line": 6,
+        "name": "Default case QA0009",
+        "steps": [
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "parameter",
+                      "value"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "When ",
+            "line": 7,
+            "name": "I send a \"GET\" request to \"get all firmwares\" endpoint",
+            "match": {
+              "location": "not available:0"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 931000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 9,
+            "name": "The response code is 200",
+            "match": {
+              "location": "not available:0"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 16000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 10,
+            "name": "I save the response body into the file \"qa0001_getAllFirmwares.json\"",
+            "match": {
+              "location": "not available:0"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 36000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 11,
+            "name": "The json file \"qa0001_getAllFirmwares.json\" is equal to the expected json file \"qa0001_getAllFirmwares.json\"",
+            "match": {
+              "location": "not available:0"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 70000000
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@QA0001",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "get-all-firmwares",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Get all firmwares",
+    "tags": [
+      {
+        "name": "@QA0001",
+        "line": 1
+      }
+    ],
+    "uri": "cypress\\tests\\qa0001_getAllFirmwares.feature"
+  }
+]

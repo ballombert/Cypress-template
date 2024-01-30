@@ -1,0 +1,39 @@
+{
+  "name": "cypress-template",
+  "version": "1.0.0",
+  "description": "This project's purpose is to automate test template.",
+  "main": "index.js",
+  "scripts": {
+    "cypress": "cypress open --env CY_ENVIRONMENT=DEV  --e2e --config specPattern=cypress/tests/**/*.feature",
+    "dev:watch": "cypress open --env CY_ENVIRONMENT=DEV --e2e --config specPattern=cypress/tests/**/*.feature",
+    "test:watch": "cypress open --env CY_ENVIRONMENT=TEST --e2e --config specPattern=cypress/tests/**/*.feature",
+    "local:watch": "cypress open --env CY_ENVIRONMENT=LOCAL --e2e --config specPattern=cypress/tests/**/*.feature",
+    "ci:watch": "cypress open --env CY_ENVIRONMENT=TEST --e2e --config specPattern=cypress/tests/**/*.feature",
+    "ci:run": "cypress run --env CY_ENVIRONMENT=DEV --e2e --spec cypress/tests/**/*.feature",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Allombert Béatrice",
+  "license": "ISC",
+  "dependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^20.0.0",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.0",
+    "@percy/cypress": "^3.1.2",
+    "mocha-junit-reporter": "^2.0.0",
+    "typescript": "^5.3.3",
+    "mongodb": "^6.1.0",
+    "signale": "^1.4.0",
+    "yargs": "^17.6.2"
+  },
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": true,
+    "filterSpecs": true,
+    "omitFiltered": true,
+    "json": {
+      "enabled": true
+    },
+    "stepDefinitions": [
+      "cypress/support/step_definitions/**/*.{js,ts}"
+    ]
+  }
+}

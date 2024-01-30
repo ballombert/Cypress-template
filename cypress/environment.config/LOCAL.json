@@ -1,0 +1,6 @@
+{
+  "env": {
+    "apiBaseUrl": "https://swapi.dev/api/",
+    "PauseController": false
+  }
+}

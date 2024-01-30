@@ -1,0 +1,110 @@
+# Starter pipeline
+
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+# DEVELOPEMENT ENV  START AT 05 AM and trigger on develop and feature branch
+
+name: $(Build.SourceBranch).$(Date:yyyyMMdd)
+
+trigger:
+  branches:
+    include:
+    - develop
+    - feature/*
+  
+schedules:
+- cron: "0 5 * * *"
+  displayName: Each morning at 5am UTC
+  branches:
+    include:
+    - develop
+  always: true
+
+parameters:
+- name: ResiAutomatedBranch
+  displayName: Resi Automated Branch
+  default: develop
+
+#Run on mongo
+variables:
+    - group: Test Env
+
+pool: 
+  vmImage: windows-latest
+
+stages : 
+  - stage: 
+    displayName: Run Test on TEST
+    jobs:
+
+    - job : 
+      displayName: Run test 
+      timeoutInMinutes: 1800
+      steps:  
+      - checkout: self
+        submodules: true  
+        persistCredentials: true
+
+      - task: UsePythonVersion@0
+        displayName: 'Use Python 3.11'
+        inputs:
+          versionSpec: '3.11'
+      
+      - task: PowerShell@2
+        displayName: pip3 install azure-storage-blob==12.12.0 
+        inputs:
+          targetType: 'inline'
+          script: |
+            pip3 install --upgrade pip 
+            pip3 install azure-storage-blob==12.12.0 
+            pip3 install azure-data-tables==12.4.1
+            
+      - task: NodeTool@0
+        displayName: 'Use Node 16.x'
+        inputs:
+          versionSpec: 16.x
+
+      - task: Npm@1
+        displayName: 'npm install'
+        inputs:
+          command: 'install'
+          workingdir: '.'
+
+      - task: Bash@3
+        displayName: Init Mongo
+        inputs:
+          targetType: 'inline'
+          script: 'node ./scripts/mongo-script.js Init --db "$(dbName)" -u "$(mongoUrl)" --directoryPath "cypress/fixtures/dataset/mongodb/"'
+
+      - task: Bash@3
+        displayName: Init Azurite
+        inputs:
+          targetType: 'inline'
+          script: 'python ./scripts/init_azurite.py --url "$(urlAzureStorage)" --login "$(azureLogin)"  --token "$(azureToken)" --directory cypress/fixtures/dataset/azurite/" --delete'
+
+      # - task: AzureAppServiceManage@0
+      #   displayName: Restart $(controllerApiWebAppName)
+      #   inputs:
+      #     azureSubscription: '$(azureSubscription)'
+      #     Action: 'Restart Azure App Service'
+      #     WebAppName: '$(controllerApiWebAppName)'
+        
+      - task: Npm@1
+        displayName: 'npm run ci:run'
+        inputs:
+          command: 'custom'
+          customCommand: 'run ci:run'
+          workingdir: '.'
+
+      - task: PublishTestResults@2
+        displayName: 'Publish the test reports'
+        inputs:
+          testResultsFormat: 'JUnit'
+          testResultsFiles: 'results/junit/*.xml'
+          mergeTestResults: true
+          testRunTitle: 'Publish Test Results'
+          publishRunAttachments: true
+        condition: succeededOrFailed()
+        continueOnError: true
+      
